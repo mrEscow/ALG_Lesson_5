@@ -1,6 +1,7 @@
 #pragma once
 //-----------------------------------------------------------------------
-void printArray(int arr[],int numRows,int numCols);
+void printArray(int array[],int numRows,int numCols);
+
 
 //-----------------------------------------------------------------------
 void printArray(int array[], int numRows, int numCols) {

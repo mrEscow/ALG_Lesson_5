@@ -1,8 +1,22 @@
 #include <iostream>
 
 #include "Header.h"
-// Реализовать пузырьковую сортировку двумерного массива например, 
-// массив 1,9,2 5,7,6 4,3,8 должен на выходе стать 1,2,3 4,5,6 7,8,9
+
+void WBubleSort(int array[], int numRows, int numCols) {
+	int temp;
+	for (int i = 0; i < numRows * numCols - 1; i++) {
+		for (int j = 0; j < numRows * numCols - i - 1; j++) {
+			if (array[j] > array[j + 1]) {
+
+				temp = array[j];
+				array[j] = array[j + 1];
+				array[j + 1] = temp;
+			}
+		}
+	}
+}
+
+
 int main() {
 
 	const int numRows = 3;
@@ -14,14 +28,11 @@ int main() {
 		{5,7,6}, 
 		{4,3,8} 
 	};
-	printArray(*array, numRows, numCols);
-	//for (int row = 0; row < numRows; ++row)
-	//{
-	//	for (int col = 0; col < numCols; ++col)
-	//		std::cout << array[row][col] << "\t";
 
-	//	std::cout << '\n';
-	//}
+
+	WBubleSort(*array, numRows, numCols);
+	printArray(*array, numRows, numCols);
+
 
 
 	return 0;
