@@ -2,65 +2,94 @@
 
 #include "Header.h"
 
-void WBubleSort(int array[], int numRows, int numCols) {
-	int temp;
-	for (int i = 0; i < numRows * numCols - 1; i++) {
-		for (int j = 0; j < numRows * numCols - i - 1; j++) {
-			if (array[j] > array[j + 1]) {
+void qs(int* arr, int first, int last) {
+    int i = first;
+    int j = last;
 
-				temp = array[j];
-				array[j] = array[j + 1];
-				array[j + 1] = temp;
-			}
-		}
-	}
+    int x = arr[(first + last) / 2];
+
+    do {
+        while (arr[i] < x) i++;
+        while (arr[j] > x) j--;
+
+        if (i <= j) {
+            swapInt(arr[i], arr[j]);
+            i++;
+            j--;
+        }
+    } while (i <= j);
+
+    if (i < last) qs(arr, i, last);
+    if (first < j) qs(arr, first, j);
 }
 
-//Описать подробную блок - схему алгоритма Трабба - Прадо - Кнута
-//1 - запросить у пользователя 11 чисел и записать их в последовательность П 
-//2 - инвертировать последовательность П 
-//3 - для каждого элемента последовательности П произвести вычисление по формуле sqrt(fabs(Х)) + 5 * pow(Х, 3) 
-//и если результат вычислений превышает 400 - проинформировать пользователя.
+void sortShells(int* arr, int len) {
+    int i;
+    int j;
+    int step;
+    int temp;
 
-void TPK() {
-	int temp;
-	const int size = 11;
-	int array[size];
-	for (int i = 0; i < size; i++)
-	{
-		std::cout << "Input  " << i + 1 << "  number :  ";
-		std::cin >> array[i];
-	}
-	for (int i = 0; i < size / 2; i++)
-	{
-		temp = array[i];
-		array[i] = array[size - i - 1];
-		array[size - i - 1] = temp;
-	}
-	for (int i = 0; i < size; i++)
-	{
-		temp = sqrt(fabs(array[i])) + 5 * pow(array[i], 3);
-		if (temp > 400) std::cout << "sqrt(fabs("<< array[i] <<")) + 5 * pow("<< array[i] <<", 3) ="<< temp << "\n";
-	}
+    for (step = len / 2; step > 0; step /= 2) {
+        for (i = step; i < len; ++i) {
+            temp = arr[i];
+            for (j = i; j >= step; j -= step) {
+                if (temp < arr[j - step]) {
+                    arr[j] = arr[j - step];
+                }
+                else {
+                    break;
+                }
+            }
+            arr[j] = temp;
+        }
+    }
 }
+int med(int a, int b, int c)
+{
+    if (a > b) { // ba ?c
+        if (c > a) // bac
+            return a;
+        return (b > c) ? b : c;
+    }
+    // ab ? c
+    if (c > b) // abc
+        return b;
+    return (a > c) ? a : c;
+}
+void bestQSort(int* arr, int first, int last) {
+    if (last + 1 < 10)
+        sortShells(arr, last + 1);
+    else
+    {
+        int  left, mid, right, mediana;
+
+        left = arr[0];
+        mid =  arr[last/2];
+        right = arr[last];
+
+        mediana = med(left, mid, right);
+
+        if(mediana == left)
+            swapInt(arr[0], arr[last / 2]);
+        if (mediana == right)
+            swapInt(arr[last], arr[last / 2]);
+
+        qs(arr, 0, last);
+    }
+}
+
+
 int main() {
 
-	const int numRows = 3;
-	const int numCols = 3;
+	const int size = 20;
+    int array[size];
 
-	int array[numRows][numCols] =
-	{
-		{1,9,2}, 
-		{5,7,6}, 
-		{4,3,8} 
-	};
 
-	
+    fillIntRandom(array,size,100);
+	printArray(array, size);
+    bestQSort(array, 0, size - 1);
+    printArray(array, size);
 
-	WBubleSort(*array, numRows, numCols);
-	printArray(*array, numRows, numCols);
-
-	TPK();
 
 	return 0;
 }
