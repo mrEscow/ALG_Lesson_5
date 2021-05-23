@@ -1,0 +1,56 @@
+@startuml void TPK()
+start
+
+:int temp;
+:const int size = 11;
+:int array[size];
+
+ while (for (int i = 0; i < size; i++))
+  :std::cout << "Input  " << i + 1 << "  number :  ";
+  :std::cin >> array[i];
+endwhile
+ while (for (int i = 0; i < size / 2; i++))
+  :temp = array[i];
+  :array[i] = array[size - i - 1];
+  :array[size - i - 1] = temp;
+endwhile
+ while (for (int i = 0; i < size; i++))
+  :temp = sqrt(fabs(array[i])) + 5 * pow(array[i], 3);
+  if (if (temp > 400)) then (yes)
+  :std::cout 
+  << "sqrt(fabs("
+  << array[i] 
+  <<")) + 5 * pow("
+  << array[i] 
+  <<", 3) ="
+  << temp 
+  << "\n";
+      else (no)
+endif
+endwhile
+end
+@enduml
+
+
+void TPK() {
+	int temp;
+	const int size = 11;
+	int array[size];
+
+	for (int i = 0; i < size; i++)
+	{
+		std::cout << "Input  " << i + 1 << "  number :  ";
+		std::cin >> array[i];
+	}
+	for (int i = 0; i < size / 2; i++)
+	{
+		temp = array[i];
+		array[i] = array[size - i - 1];
+		array[size - i - 1] = temp;
+	}
+	for (int i = 0; i < size; i++)
+	{
+		temp = sqrt(fabs(array[i])) + 5 * pow(array[i], 3);
+		if (temp > 400) std::cout << "sqrt(fabs("<< array[i] <<")) + 5 * pow("<< array[i] <<", 3) ="<< temp << "\n";
+	}
+}
