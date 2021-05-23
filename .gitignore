@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+/Algorithms/Debug
+/Algorithms/x64/Release
+/Algorithms/Algorithms.sln
+/Algorithms/Algorithms/x64/Release
+/Algorithms/Algorithms/Debug
+/.vs
+/Algorithms/.vs/Algorithms/v16
+/Algorithms/Algorithms/Algorithms.vcxproj
+/Algorithms/Algorithms/Algorithms.vcxproj.filters
+/Algorithms/Algorithms/Algorithms.vcxproj.user
