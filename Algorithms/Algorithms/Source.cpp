@@ -78,16 +78,54 @@ void bestQSort(int* arr, int first, int last) {
     }
 }
 
+// Сортировать в массиве целых положительных чисел только чётные числа,
+// нечётные оставив на своих местах при помощи алгоритма блочной сортировки, 
+// то есть массив вида[0 2 8 3 4 6 5 9 8 2 7 3] превратить в[0 2 2 3 4 6 5 9 8 8 7 3]
 
+void bucketSort(int* arr, int len) {
+
+    const int max = 12; len; // C++
+    const int b = 10;
+
+    int  buckets[b][max + 1];
+
+    for (int i = 0; i < b; ++i) {
+        buckets[i][max] = 0;
+    }
+
+    for (int digit = 1; digit < 100000; digit*=10) {
+        for (int i = 0; i < max; ++i) {
+            int d = (arr[i] / digit) % b;
+
+            int counter = buckets[d][max];
+           
+            buckets[d][counter] = arr[i];
+            counter++;
+            buckets[d][max] = counter;
+            //std::cout << buckets[d][counter] << std::endl;
+            //buckets[d][buckets[d][max]++] = arr[i];
+        }
+        int idx = 0;
+        for (int i = 0; i < b; ++i) {
+            for (int j = 0; j < buckets[i][max]; ++j) {
+                if((arr[idx] & 1) == 0)
+                    arr[idx++] = buckets[i][j];
+               // else
+                {
+                  //  idx++;  //++j; 
+                }
+            }
+            buckets[i][max] = 0;
+        }
+    }
+}
 int main() {
 
-	const int size = 20;
-    int array[size];
+	const int size = 12;
+    int array[size] = { 0, 2, 8, 3, 4, 6, 5, 9, 8, 2, 7, 3 };
 
-
-    fillIntRandom(array,size,100);
 	printArray(array, size);
-    bestQSort(array, 0, size - 1);
+    bucketSort(array, size);
     printArray(array, size);
 
 
