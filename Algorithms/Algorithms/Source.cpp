@@ -128,10 +128,10 @@ void bucketSort(int* arr, int len) {
             buckets[i][max] = 0;
         }
     }
-
+    printArray(arr, max);
     for (int i = 0; i < max; i++)
     {
-        if (temp_array[i] % 2 == 0)
+        if (temp_array[i] % 2 != 0)
             arr[i] = temp_array[i];
     }
 }
