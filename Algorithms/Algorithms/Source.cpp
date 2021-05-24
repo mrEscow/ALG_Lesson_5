@@ -89,34 +89,50 @@ void bucketSort(int* arr, int len) {
 
     int  buckets[b][max + 1];
 
+    int temp_array[max];
+    for (int i = 0; i < max; i++)
+    {
+        temp_array[i] = arr[i];
+    }
+
     for (int i = 0; i < b; ++i) {
         buckets[i][max] = 0;
     }
 
-    for (int digit = 1; digit < 100000; digit*=10) {
+    for (int digit = 1; digit <= 10; digit*=10) {
         for (int i = 0; i < max; ++i) {
             int d = (arr[i] / digit) % b;
 
-            int counter = buckets[d][max];
-           
-            buckets[d][counter] = arr[i];
-            counter++;
-            buckets[d][max] = counter;
+            //int counter = buckets[d][max];          
+            //buckets[d][counter] = arr[i];
+            //counter++;
+            //buckets[d][max] = counter;
+
             //std::cout << buckets[d][counter] << std::endl;
-            //buckets[d][buckets[d][max]++] = arr[i];
+            buckets[d][buckets[d][max]++] = arr[i];
         }
+        //printArray(*buckets, 12);
         int idx = 0;
         for (int i = 0; i < b; ++i) {
             for (int j = 0; j < buckets[i][max]; ++j) {
-                if((arr[idx] & 1) == 0)
+               
+                //if((arr[idx] & 1) == 0)
                     arr[idx++] = buckets[i][j];
-               // else
+                //else
                 {
-                  //  idx++;  //++j; 
+                    //arr[idx++] = arr[idx--];
+                    //idx++;  
+                    //++j; 
                 }
             }
             buckets[i][max] = 0;
         }
+    }
+    printArray(arr, max);
+    for (int i = 0; i < max; i++)
+    {
+        if (temp_array[i] % 2 != 0)
+            arr[i] = temp_array[i];
     }
 }
 int main() {
