@@ -1,10 +1,16 @@
-#include <iostream>
+#include <string>
+#include <cstring>  // for wcscpy_s, wcscat_s
+#include <cstdlib>  // for _countof
+#include <iostream> // for cout, includes <cstdlib>, <cstring>
+#include <errno.h>  // for return values
 
 using std::cout;
 using std::endl;
 using std::cin;
 
 #include "Header.h"
+#include "Source.h"
+
 
 
 // 1.Описать очередь с приоритетным исключением
@@ -19,76 +25,40 @@ typedef struct{
 }Node;
 
 Node* arr[SZ];
-int head;
 int tail;
 int items;
 
 void init() {
-	for (int i = 0; i < SZ; i++){
-		arr[i] = NULL;
-	}
-	head = 0;
+
 	tail = 0;
 	items = 0;
 
+	for (int i = 0; i < SZ; i++) {
+		arr[i] = NULL;
+	}
 }
 
 void ins(int pr, int dat) {
-	Node* node = (Node*)malloc(sizeof(Node));
-	node->dat = dat;
-	node->pr = pr;
-	int flag;
 
-	if (items == 0) {
+	Node* node = (Node*)malloc(sizeof(Node));
+
+	node->pr = pr;
+	node->dat = dat;
+
+	if (items < SZ) {
 		arr[tail++] = node;
 		items++;
 	}
-	else if (items == SZ) {
+	else {
 		cout << "Queue is full" << endl;
-		return;
+		//return;
 	}
-	else {
-		int i = 0;
-		int idx = 0;
-		Node* tmp;
-		for ( i = head; i < tail; ++i){
-			idx = i % SZ;
-			if (arr[idx]->pr > pr)
-				break;
-			else
-				idx++;
-		}
-		flag = idx % SZ;
-		i++;
-		while (i <= tail) {
-			idx = i % SZ;
-			tmp = arr[idx];
-			arr[idx] = arr[flag];
-			arr[flag] = tmp;
-			i++;
-		}
-		arr[flag] = node;
-		items++;
-		tail++;
-	}
-}
 
-Node* rem() {
-	if (items == 0) {
-		return NULL;
-	}
-	else {
-		int idx = head++ % SZ;
-		Node* tmp = arr[idx];
-		arr[idx] = NULL;
-		items--;
-		return tmp;
-	}
 }
 
 void printQueue() {
 	cout << "[ ";
-	for (int i = 0; i < SZ; i++){
+	for (int i = 0; i < SZ; i++) {
 		if (arr[i] == NULL)
 			cout << "[*, *]";
 		else
@@ -97,21 +67,79 @@ void printQueue() {
 	cout << " ]";
 }
 // 2.Реализовать перевод из десятичной в двоичную систему счисления с использованием стека.
+#define T char
+#define SIZE 1000
+
+int cursor = -1;
+T Stack2[SIZE];
+
+bool pushStack(T data) {
+	if (cursor < SIZE) {
+		Stack2[++cursor] = data;
+		return true;
+	}
+	else {
+		printf("%s \n", "Stack overflow");
+		return false;
+	}
+}
+
+T popStack() {
+	if (cursor != -1) {
+		return Stack2[cursor--];
+	}
+	else {
+		printf("%s \n", "Stack is empty");
+		return -1;
+	}
+}
+
+int rem() {
+	if (items == 0) {
+		cout << "Queue is empty" << endl;
+		return NULL;
+	}
+	int max = arr[0]->pr;
+	int idx = 0;
+
+	for (int i = 0; i < items; i++){
+		if (arr[i]->pr > max) {
+			max = arr[i]->pr;
+			idx = i;
+		}
+	}
+	Node* tmp = arr[idx];
+	int result = tmp->dat;
+	arr[idx] = arr[tail];
+	items--;
+	tail--;
+	delete tmp;
+	return result;
+}
+
+bool decToBin(int a, std::string& result) {
+	if (a <= 0) return false;
+	while (a >= 1) {
+		pushStack(a % 2);
+		a /= 2;
+	}
+	int count = cursor;
+	for (int i = 0; i <= count; ++i) {
+		//strcpy_s(result, (rsize_t)1000, 'a');
+		result += (popStack()) ? "1" : "0";
+		//wcscpy_s(result, _countof(result) (popStack()) ? L"1" : L"0");
+	}
+	return true;
+}
+
+
+
 
 int main() {
+	std::string result;
+	decToBin(8, result);
 
-	init();
-	ins(1, 45);
-	ins(4, 5);
-	ins(7, 4);
-	ins(3, 466);
-	ins(1, 37);
-	ins(6, 29);
-	ins(9, 130);
-	ins(2, 30);
-	ins(1, 15);
-	ins(5, 15);
-	printQueue();
+	cout << result << endl;
 
 	return 0;
 }

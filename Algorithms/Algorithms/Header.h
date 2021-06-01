@@ -239,7 +239,7 @@ void bucketSort(int* arr, int len) {
 
 
 
-//////// 1.Описать очередь с приоритетным исключением
+//////// 
 //////#define T_DATA char
 //////#define SIZE 1000
 //////
@@ -321,3 +321,68 @@ void bucketSort(int* arr, int len) {
 ////////		return -1;
 ////////	}
 ////////}
+
+
+//////#define SZ 10
+//////
+//////typedef struct {
+//////
+//////	int pr;
+//////	int dat;
+//////
+//////}Node;
+//////
+//////Node* arr[SZ];
+//////int head;
+//////int tail;
+//////int items;
+//////
+//////void init() {
+//////	for (int i = 0; i < SZ; i++) {
+//////		arr[i] = NULL;
+//////	}
+//////	head = 0;
+//////	tail = 0;
+//////	items = 0;
+//////
+//////}
+//////
+//////void ins(int pr, int dat) {
+//////	Node* node = (Node*)malloc(sizeof(Node));
+//////	node->dat = dat;
+//////	node->pr = pr;
+//////	int flag;
+//////
+//////	if (items == 0) {
+//////		arr[tail++] = node;
+//////		items++;
+//////	}
+//////	else if (items == SZ) {
+//////		cout << "Queue is full" << endl;
+//////		return;
+//////	}
+//////	else {
+//////		int i = 0;
+//////		int idx = 0;
+//////		Node* tmp;
+//////		for (i = head; i < tail; ++i) {
+//////			idx = i % SZ;
+//////			if (arr[idx]->pr > pr)
+//////				break;
+//////			else
+//////				idx++;
+//////		}
+//////		flag = idx % SZ;
+//////		i++;
+//////		while (i <= tail) {
+//////			idx = i % SZ;
+//////			tmp = arr[idx];
+//////			arr[idx] = arr[flag];
+//////			arr[flag] = tmp;
+//////			i++;
+//////		}
+//////		arr[flag] = node;
+//////		items++;
+//////		tail++;
+//////	}
+//////}
