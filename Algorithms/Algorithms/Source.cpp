@@ -8,102 +8,110 @@ using std::cin;
 
 
 // 1.Описать очередь с приоритетным исключением
-#define T_DATA char
-#define SIZE 1000
 
+#define SZ 10
 
-T_DATA Queue[SIZE];
-int first = 0;
-int end = -1;
+typedef struct{
 
-int items = 0;
+	int pr;
+	int dat;
 
-//bool enQueue(T_DATA data) {
-//	if (end < SIZE) {
-//		Queue[++end] = data;
-//		return true;
-//	}
-//	else {
-//		cout << "Queue is full" << endl;
-//		return false;
-//	}
-//}
-bool enQueue(T_DATA data) {
-	if (items == SIZE) {
-		cout << "Queue is full" << endl;
-		return false;
+}Node;
+
+Node* arr[SZ];
+int head;
+int tail;
+int items;
+
+void init() {
+	for (int i = 0; i < SZ; i++){
+		arr[i] = NULL;
 	}
-	if(end == SIZE - 1)
-		end = -1;
-	Queue[++end] = data;
-	items++;
-	return true;
+	head = 0;
+	tail = 0;
+	items = 0;
+
 }
 
-//T_DATA deQueue() {
-//	if (first <= end) {
-//		return Queue[first++];
-//	}
-//	else {
-//		cout << "Queue is empty" << endl;
-//		return -1;
-//	}
-//}
+void ins(int pr, int dat) {
+	Node* node = (Node*)malloc(sizeof(Node));
+	node->dat = dat;
+	node->pr = pr;
+	int flag;
 
-T_DATA deQueue() {
 	if (items == 0) {
-		cout << "Queue is empty" << endl;
-		return -1;
+		arr[tail++] = node;
+		items++;
 	}
-	else{
-		char tmp = Queue[first++];
-		first %= SIZE;  // if (first == SIZE) first = 0;
+	else if (items == SZ) {
+		cout << "Queue is full" << endl;
+		return;
+	}
+	else {
+		int i = 0;
+		int idx = 0;
+		Node* tmp;
+		for ( i = head; i < tail; ++i){
+			idx = i % SZ;
+			if (arr[idx]->pr > pr)
+				break;
+			else
+				idx++;
+		}
+		flag = idx % SZ;
+		i++;
+		while (i <= tail) {
+			idx = i % SZ;
+			tmp = arr[idx];
+			arr[idx] = arr[flag];
+			arr[flag] = tmp;
+			i++;
+		}
+		arr[flag] = node;
+		items++;
+		tail++;
+	}
+}
+
+Node* rem() {
+	if (items == 0) {
+		return NULL;
+	}
+	else {
+		int idx = head++ % SZ;
+		Node* tmp = arr[idx];
+		arr[idx] = NULL;
 		items--;
 		return tmp;
 	}
 }
 
-//#define T_DATA char
-//#define SIZE 1000
-//
-//int cursor = -1;
-//T_DATA Stack[SIZE];
-//
-//bool push(T_DATA data) {
-//	if (cursor < SIZE) {
-//		Stack[++cursor] = data;
-//		return true;
-//	}
-//	else {
-//		cout << "Stack overflow" << endl;
-//		return false;
-//	}
-//}
-//
-//T_DATA pop() {
-//	if (cursor != -1) {
-//		return Stack[cursor--];
-//	}
-//	else {
-//		cout << "Stack is empty" << endl;
-//		return -1;
-//	}
-//}
-
+void printQueue() {
+	cout << "[ ";
+	for (int i = 0; i < SZ; i++){
+		if (arr[i] == NULL)
+			cout << "[*, *]";
+		else
+			cout << "[" << arr[i]->pr << ", " << arr[i]->dat << "]";
+	}
+	cout << " ]";
+}
 // 2.Реализовать перевод из десятичной в двоичную систему счисления с использованием стека.
 
 int main() {
 
-	enQueue('a');
-	enQueue('b');
-	enQueue('c');
-	enQueue('d');
-	enQueue('e');
-	enQueue('f');
-
-	while (items > 0){
-		cout << deQueue();
-	}
+	init();
+	ins(1, 45);
+	ins(4, 5);
+	ins(7, 4);
+	ins(3, 466);
+	ins(1, 37);
+	ins(6, 29);
+	ins(9, 130);
+	ins(2, 30);
+	ins(1, 15);
+	ins(5, 15);
+	printQueue();
 
 	return 0;
 }
