@@ -1,149 +1,145 @@
-#include <iostream>
+#include <string>
+#include <cstring>  // for wcscpy_s, wcscat_s
+#include <cstdlib>  // for _countof
+#include <iostream> // for cout, includes <cstdlib>, <cstring>
+#include <errno.h>  // for return values
+
+using std::cout;
+using std::endl;
+using std::cin;
 
 #include "Header.h"
+#include "Source.h"
 
-void qs(int* arr, int first, int last) {
-    int i = first;
-    int j = last;
 
-    int x = arr[(first + last) / 2];
 
-    do {
-        while (arr[i] < x) i++;
-        while (arr[j] > x) j--;
+// 1.Описать очередь с приоритетным исключением
 
-        if (i <= j) {
-            swapInt(arr[i], arr[j]);
-            i++;
-            j--;
-        }
-    } while (i <= j);
+#define SZ 10
 
-    if (i < last) qs(arr, i, last);
-    if (first < j) qs(arr, first, j);
+typedef struct{
+
+	int pr;
+	int dat;
+
+}Node;
+
+Node* arr[SZ];
+int tail;
+int items;
+
+void init() {
+
+	tail = 0;
+	items = 0;
+
+	for (int i = 0; i < SZ; i++) {
+		arr[i] = NULL;
+	}
 }
 
-void sortShells(int* arr, int len) {
-    int i;
-    int j;
-    int step;
-    int temp;
+void ins(int pr, int dat) {
 
-    for (step = len / 2; step > 0; step /= 2) {
-        for (i = step; i < len; ++i) {
-            temp = arr[i];
-            for (j = i; j >= step; j -= step) {
-                if (temp < arr[j - step]) {
-                    arr[j] = arr[j - step];
-                }
-                else {
-                    break;
-                }
-            }
-            arr[j] = temp;
-        }
-    }
-}
-int med(int a, int b, int c)
-{
-    if (a > b) { // ba ?c
-        if (c > a) // bac
-            return a;
-        return (b > c) ? b : c;
-    }
-    // ab ? c
-    if (c > b) // abc
-        return b;
-    return (a > c) ? a : c;
-}
-void bestQSort(int* arr, int first, int last) {
-    if (last + 1 < 10)
-        sortShells(arr, last + 1);
-    else
-    {
-        int  left, mid, right, mediana;
+	Node* node = (Node*)malloc(sizeof(Node));
 
-        left = arr[0];
-        mid =  arr[last/2];
-        right = arr[last];
+	node->pr = pr;
+	node->dat = dat;
 
-        mediana = med(left, mid, right);
+	if (items < SZ) {
+		arr[tail++] = node;
+		items++;
+	}
+	else {
+		cout << "Queue is full" << endl;
+		//return;
+	}
 
-        if(mediana == left)
-            swapInt(arr[0], arr[last / 2]);
-        if (mediana == right)
-            swapInt(arr[last], arr[last / 2]);
-
-        qs(arr, 0, last);
-    }
 }
 
-// Сортировать в массиве целых положительных чисел только чётные числа,
-// нечётные оставив на своих местах при помощи алгоритма блочной сортировки, 
-// то есть массив вида[0 2 8 3 4 6 5 9 8 2 7 3] превратить в[0 2 2 3 4 6 5 9 8 8 7 3]
-
-void bucketSort(int* arr, int len) {
-
-    const int max = 12; len; // C++
-    const int b = 10;
-
-    int  buckets[b][max + 1];
-
-    int temp_array[max];
-    for (int i = 0; i < max; i++)
-    {
-        temp_array[i] = arr[i];
-    }
-
-    for (int i = 0; i < b; ++i) {
-        buckets[i][max] = 0;
-    }
-
-    for (int digit = 1; digit <= 10; digit*=10) {
-        for (int i = 0; i < max; ++i) {
-            int d = (arr[i] / digit) % b;
-
-            //int counter = buckets[d][max];          
-            //buckets[d][counter] = arr[i];
-            //counter++;
-            //buckets[d][max] = counter;
-
-            //std::cout << buckets[d][counter] << std::endl;
-            buckets[d][buckets[d][max]++] = arr[i];
-        }
-        //printArray(*buckets, 12);
-        int idx = 0;
-        for (int i = 0; i < b; ++i) {
-            for (int j = 0; j < buckets[i][max]; ++j) {
-               
-                //if((arr[idx] & 1) == 0)
-                    arr[idx++] = buckets[i][j];
-                //else
-                {
-                    //arr[idx++] = arr[idx--];
-                    //idx++;  
-                    //++j; 
-                }
-            }
-            buckets[i][max] = 0;
-        }
-    }
-    printArray(arr, max);
-    for (int i = 0; i < max; i++)
-    {
-        if (temp_array[i] % 2 != 0)
-            arr[i] = temp_array[i];
-    }
+void printQueue() {
+	cout << "[ ";
+	for (int i = 0; i < SZ; i++) {
+		if (arr[i] == NULL)
+			cout << "[*, *]";
+		else
+			cout << "[" << arr[i]->pr << ", " << arr[i]->dat << "]";
+	}
+	cout << " ]";
 }
+// 2.Реализовать перевод из десятичной в двоичную систему счисления с использованием стека.
+#define T char
+#define SIZE 1000
+
+int cursor = -1;
+T Stack2[SIZE];
+
+bool pushStack(T data) {
+	if (cursor < SIZE) {
+		Stack2[++cursor] = data;
+		return true;
+	}
+	else {
+		printf("%s \n", "Stack overflow");
+		return false;
+	}
+}
+
+T popStack() {
+	if (cursor != -1) {
+		return Stack2[cursor--];
+	}
+	else {
+		printf("%s \n", "Stack is empty");
+		return -1;
+	}
+}
+
+int rem() {
+	if (items == 0) {
+		cout << "Queue is empty" << endl;
+		return NULL;
+	}
+	int max = arr[0]->pr;
+	int idx = 0;
+
+	for (int i = 0; i < items; i++){
+		if (arr[i]->pr > max) {
+			max = arr[i]->pr;
+			idx = i;
+		}
+	}
+	Node* tmp = arr[idx];
+	int result = tmp->dat;
+	arr[idx] = arr[tail];
+	items--;
+	tail--;
+	delete tmp;
+	return result;
+}
+
+bool decToBin(int a, std::string& result) {
+	if (a <= 0) return false;
+	while (a >= 1) {
+		pushStack(a % 2);
+		a /= 2;
+	}
+	int count = cursor;
+	for (int i = 0; i <= count; ++i) {
+		//strcpy_s(result, (rsize_t)1000, 'a');
+		result += (popStack()) ? "1" : "0";
+		//wcscpy_s(result, _countof(result) (popStack()) ? L"1" : L"0");
+	}
+	return true;
+}
+
+
+
+
 int main() {
+	std::string result;
+	decToBin(8, result);
 
-	const int size = 12;
-    int array[size] = { 0, 2, 8, 3, 4, 6, 5, 9, 8, 2, 7, 3 };
-
-	printArray(array, size);
-    bucketSort(array, size);
-    printArray(array, size);
-
+	cout << result << endl;
 
 	return 0;
 }
