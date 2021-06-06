@@ -164,10 +164,34 @@ void CreateForest(Node *root,int tree_size, int node_size) {
     }
 }
 
+float Balancing_percentage(Node* root, int tree_size, int node_size) {
+
+    int sumTrueBalans = 0;
+    for (int i = 0; i < tree_size; i++) {
+
+        if (isBalanced(&root[i]))
+            sumTrueBalans++;
+
+    }
+
+    return  (sumTrueBalans * 100) / tree_size;
+}
+
 // 2. Написать рекурсивную функцию бинарного поиска в дереве хранящемся в узлах, а не в массиве.
 
+bool search(Node* x, int k) {
+    if (x == NULL)
+        return false;
+    if (x->key == k )
+        return true;
+    if (k < x->key)
+        return search(x->left, k);
+    else
+        return search(x->right, k);
+    return false;
+}
 
-
+//---------------------------------------------------------------------------------------------------------------
 void printBinTree(Node* root) {
     if (root) {
         printf("%d", root->key);
@@ -191,42 +215,12 @@ void printBinTree(Node* root) {
 // Результатом работы должен стать один файл с кодом на языке С, содержащий функцию main и все необходимые функции.
 int main(){
 
-    //Node* root = newNode(10);
-
-    //
-    //root->left = newNode(5);
-
-    //root->right = newNode(100);
-
-    //root->right->left = newNode(50);
-
-    //root->right->right = newNode(150);
-
-    //root->right->left->left = newNode(40);
-
-    //isBalanced(root) ? cout << "Balanced" : cout << "Not Balanced";
-
     const int tree_size = 50;
     const int node_size = 10000;
     Node root[tree_size] = {};
     CreateForest(root, tree_size, node_size);
-    //for (int i = 0; i < tree_size; ++i) {
-    //    srand(time(NULL));
-    //    Node* pt_root = newNode(rand() % 100);
-    //    root[i] = *pt_root;
-    //    for (int j = 0; j < node_size; ++j) {
-    //        insert(&root[i], rand() % 10);
-    //    }
-    //}
-
-    printBinTree(&root[0]);
-    cout << endl;
-    for (int i = 0; i < tree_size; i++)  {
-        cout << i + 1 << "\t";
-        isBalanced(&root[i]) ? cout << "Balanced" : cout << "Not Balanced";
-        cout << endl;
-    }
-
+    cout << "Result :  " << Balancing_percentage(root, tree_size, node_size) << " %" << endl;
+    cout << search(&root[0], 333) << endl;
     return 0;
 
 }
