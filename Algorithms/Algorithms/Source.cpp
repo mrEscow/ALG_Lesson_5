@@ -17,20 +17,32 @@ void password_caesar(std::string& str, int key) {
 
 	for (int i = 0; i < str.size(); i++)
 	{
-		if(i + key < str.size())
-			temp[i] = str[i + key];
+		if(key > 0)
+			if(i + key < str.size())
+				temp[i] = str[i + key];
+			else
+				temp[i] = str[i + key - str.size()];
 		else
-			temp[i] = str[i + key - str.size()];
+			if (i + key < 0)
+				temp[i] = str[i + str.size() + key];
+			else
+				temp[i] = str[i + key];
 	}
 
 	str = temp;
 }
 
 int main() {
-	std::string str = "Hello World";
-	int key = 4;
-	password_caesar(str, key);
 
+	std::string str = "Hello World";
+	int key; 
+
+	key = 4;
+	password_caesar(str, key);
+	cout << "STRING: " << str << "  KEY: " << key << endl;
+
+	key = -4;
+	password_caesar(str, key);
 	cout << "STRING: " << str << "  KEY: " << key << endl;
 
 	return 0;
