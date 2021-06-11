@@ -17,10 +17,7 @@ using std::cin;
 
 
 int main() {
-	std::string result;
-	decToBin(8, result);
 
-	cout << result << endl;
 
 	return 0;
 }
