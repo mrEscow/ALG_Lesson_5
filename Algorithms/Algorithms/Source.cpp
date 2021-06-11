@@ -32,18 +32,20 @@ void password_caesar(std::string& str, int key) {
 	str = temp;
 }
 
+// 2. Реализовать шифрование и расшифровку перестановками с передаваемым в функцию сообщением и количеством столбцов
+
 int main() {
 
-	std::string str = "Hello World";
-	int key; 
+	//std::string str = "Hello World";
+	//int key; 
 
-	key = 4;
-	password_caesar(str, key);
-	cout << "STRING: " << str << "  KEY: " << key << endl;
+	//key = 4;
+	//password_caesar(str, key);
+	//cout << "STRING: " << str << "  KEY: " << key << endl;
 
-	key = -4;
-	password_caesar(str, key);
-	cout << "STRING: " << str << "  KEY: " << key << endl;
+	//key = -4;
+	//password_caesar(str, key);
+	//cout << "STRING: " << str << "  KEY: " << key << endl;
 
 	return 0;
 }
