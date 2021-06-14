@@ -43,7 +43,7 @@ string coder(string s, int w)
 		h = s.length() / w + 1;
 	else
 		h = s.length() / w;
-
+	cout << s.length() << "\t" << s.size() << endl;
 	//char a[h][w] ;
 
 	/*выделяем количество строк в массиве*/
@@ -57,9 +57,9 @@ string coder(string s, int w)
 
 		int k = 0;
 
-	for (int i = 0; i < h; i++)
+	for (int i = 0; i < w; i++)
 	{
-		for (int j = 0; j < w; j++)
+		for (int j = 0; j < h; j++)
 		{
 			if (k < s.length())
 			{
@@ -72,9 +72,9 @@ string coder(string s, int w)
 
 	string code;
 
-	for (int i = 0; i < w; i++)
+	for (int i = 0; i < h; i++)
 	{
-		for (int j = 0; j < h; j++)
+		for (int j = 0; j < w; j++)
 		{
 			code += a[j][i];
 		}
@@ -82,7 +82,7 @@ string coder(string s, int w)
 
 	for (int i = 0; i < w; i++) {
 
-		delete[] a[i];
+		//delete[] a[i];
 	}
 
 	//delete[] a;
@@ -93,7 +93,7 @@ string coder(string s, int w)
 string decoder(string s, int w)
 {
 	int h = s.length() / w;;
-
+	
 	//char a[w][h];
 	/*выделяем количество строк в массиве*/
 	char** a = new char* [h];
@@ -122,8 +122,9 @@ string decoder(string s, int w)
 	}
 
 	for (int i = 0; i < w; i++) {
-		delete[] a[i];
+		//delete[] a[i];
 	}
+
 	//delete[] a;
 
 	return decode;
@@ -143,13 +144,20 @@ int main() {
 	//password_caesar(str, key);
 	//cout << "STRING: " << str << "  KEY: " << key << endl;
 
-	string s;
-	cout << "Кодируемое слово:" << endl;
-	getline(cin, s);
-	int w;
-	cout << "Ключ (ширина таблицы):" << endl;
-	cin >> w;
-	cout << "Закодированная фраза : " << coder(s, w) << endl << "Декодированная фраза : " << decoder(coder(s, w), w);
+	string s = "hello world";
+	int w;// = 2;
+
+	do
+	{
+
+		cout << "Кодируемое слово: " << endl;
+		//getline(cin, s);
+
+		cout << "Ключ (ширина таблицы):" << endl;
+		cin >> w;
+		cout << "Закодированная фраза : " << coder(s, w) << endl << "Декодированная фраза : " << decoder(coder(s, w), w);
+	} while (w != -1);
+
 
 	return 0;
 }
